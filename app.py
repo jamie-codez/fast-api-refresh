@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 
 app = FastAPI()
 students = {
@@ -17,5 +17,5 @@ def index():
 
 # Path parameter
 @app.get("/students/{student_id}")
-def get_student_by_id(student_id: int):
+def get_student_by_id(student_id: int = Path(None, description="The id of the student to be retrieved",gt=0)):
     return students[student_id]

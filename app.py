@@ -23,7 +23,8 @@ def get_student_by_id(student_id: int = Path(None, description="The id of the st
 
 # Query parameters
 @app.get("/students")
-def get_students_by_name(name: str):
+def get_students_by_name(
+        name: str = None):  # This makes it optional, or we can use Optional[str]=None (Is the recommended way)
     for student_id in students:
         if students[student_id][name] == name:
             return students[student_id]

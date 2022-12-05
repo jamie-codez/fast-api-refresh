@@ -1,14 +1,21 @@
 from fastapi import FastAPI, Path
 from typing import Optional
+from pydantic import BaseModel
 
 app = FastAPI()
 students = {
     1: {
         "name": "John",
         "age": 17,
-        "class": "final year"
+        "year": "final year"
     }
 }
+
+
+class Student(BaseModel):
+    name: str
+    age: int
+    year: str
 
 
 @app.get("/")
@@ -42,3 +49,12 @@ def get_student_by_id_and_name(*, student_id_v: int, name: Optional[str] = None)
         if students[student_id]["name"] == name:
             return students[student_id]
     return {"message": "No data found"}
+
+
+# Working with request bodies
+@app.post("/students/create/{student_id}")
+def create_student(student_id: int, student: Student):
+    if student_id in students:
+        return {"message": "Student already exist"}
+    students[student_id] = student
+    return students[student_id]

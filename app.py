@@ -18,6 +18,12 @@ class Student(BaseModel):
     year: str
 
 
+class UpdateStudent(BaseModel):
+    name: Optional[str] = None
+    age: Optional[int] = None
+    year: Optional[str] = None
+
+
 @app.get("/")
 def index():
     return {"message": "Server is app and running"}
@@ -57,4 +63,20 @@ def create_student(student_id: int, student: Student):
     if student_id in students:
         return {"message": "Student already exist"}
     students[student_id] = student
+    return students[student_id]
+
+
+# Put methods : When the method is left as update_student(student_id: int, student: UpdateStudent) it updates the
+# provided field and puts null in the others ; Lets solve this as below
+@app.put("/students/update/{student_id}")
+def update_student(student_id: int, student: UpdateStudent):
+    if student_id not in students:
+        return {"message": "Student does not exist"}
+    if student.name is not None:
+        students[student_id].name = student.name
+    if student.age is not None:
+        students[student_id].age = student.age
+    if students[student_id].year is not None:
+        students[student_id].year = student.year
+    # students[student_id] = student
     return students[student_id]
